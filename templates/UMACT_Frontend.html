@@ -18,7 +18,7 @@
 
     <div class="bg-white w-full max-w-md h-full shadow-2xl relative overflow-hidden flex flex-col">
         
-        <div class="bg-brand text-white p-6 rounded-b-3xl shadow-lg">
+        <div class="bg-brand text-white p-6 rounded-b-3xl shadow-lg shrink-0">
             <div class="flex justify-between items-center mb-4">
                 <h1 class="text-xl font-bold">MagnifiCare</h1>
                 <i class="fas fa-user-circle text-2xl"></i>
@@ -27,7 +27,7 @@
             <h2 class="text-3xl font-bold">{{ user.name }}</h2>
         </div>
 
-        <div class="flex-1 overflow-y-auto p-6 space-y-6 pb-20">
+        <div class="flex-1 overflow-y-auto p-6 space-y-6 pb-12">
             
             <div class="bg-gradient-to-r from-dark to-gray-800 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
                 <div class="absolute top-0 right-0 p-4 opacity-20"><i class="fas fa-gem text-6xl"></i></div>
@@ -40,14 +40,55 @@
                 </div>
             </div>
 
-            <div>
-                <div class="flex items-center justify-between mb-2">
-                    <h4 class="font-bold text-gray-700">Hospital Admission Gateway</h4>
+            <div class="border-t border-gray-200 pt-4 mt-2">
+                <h4 class="font-bold text-brand mb-3 uppercase tracking-wider text-sm"><i class="fas fa-heartbeat mr-1"></i> Preventative Vitality</h4>
+                
+                <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm mb-4">
+                    <div class="flex justify-between items-end mb-2">
+                        <div>
+                            <p class="text-gray-500 text-sm font-bold">Step 2: Daily Activity</p>
+                            <p class="text-2xl font-bold text-dark"><span id="ui-steps">{{ user.steps_today }}</span> <span class="text-sm font-normal text-gray-500">/ 10,000 steps</span></p>
+                        </div>
+                        <i class="fas fa-shoe-prints text-brand text-2xl"></i>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                        <div class="bg-brand h-2.5 rounded-full" style="width: {{ (user.steps_today / 10000) * 100 }}%"></div>
+                    </div>
+                    <button onclick="syncWearable()" class="w-full bg-blue-50 text-blue-600 font-semibold py-2 rounded-xl border border-blue-200 hover:bg-blue-100 transition text-sm">
+                        <i class="fab fa-apple mr-2"></i> Sync Wearable (+100 pts)
+                    </button>
                 </div>
+
+                <button onclick="toggleModal('uploadModal')" class="w-full bg-white border border-gray-200 rounded-2xl p-4 shadow-sm flex items-center justify-between hover:shadow-md transition mb-4">
+                    <div class="flex items-center">
+                        <div class="bg-green-100 p-3 rounded-full mr-4 text-green-600"><i class="fas fa-file-medical"></i></div>
+                        <div class="text-left">
+                            <p class="font-bold text-dark text-sm">Step 1: Log Health Report</p>
+                            <p class="text-xs text-gray-500">Update ML risk profile (+5,000 pts)</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-300"></i>
+                </button>
+
+                <div class="flex gap-4">
+                    <div class="flex-1 bg-white border border-gray-200 rounded-2xl p-3 shadow-sm text-center">
+                        <i class="fas fa-shopping-basket text-orange-500 text-xl mb-1"></i>
+                        <p class="text-[11px] font-bold">Jaya Grocer</p>
+                        <p class="text-[10px] text-gray-500">-10% Off</p>
+                    </div>
+                    <div class="flex-1 bg-white border border-gray-200 rounded-2xl p-3 shadow-sm text-center">
+                        <i class="fas fa-dumbbell text-gray-800 text-xl mb-1"></i>
+                        <p class="text-[11px] font-bold">Gym Pass</p>
+                        <p class="text-[10px] text-gray-500">RM 50 Cash</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 pt-4 mt-2">
+                <h4 class="font-bold text-dark mb-3 uppercase tracking-wider text-sm"><i class="fas fa-hospital mr-1"></i> Admission Gateway</h4>
                 
                 <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
-                    
-                    <label class="text-xs font-bold text-gray-500 uppercase">1. Select Coverage Tier</label>
+                    <label class="text-xs font-bold text-gray-500 uppercase">Select Coverage Tier</label>
                     <div class="space-y-2 mt-2 mb-4">
                         <div id="t1-card" onclick="selectTier(1)" class="tier-card border border-gray-200 rounded-xl p-3 flex justify-between items-center cursor-pointer transition opacity-50">
                             <div>
@@ -99,22 +140,8 @@
                 </div>
             </div>
 
-            <div>
-                <h4 class="font-bold text-gray-700 mb-2">Preventative Care</h4>
-                <button onclick="toggleModal('uploadModal')" class="w-full bg-white border border-gray-200 rounded-2xl p-4 shadow-sm flex items-center justify-between hover:shadow-md transition">
-                    <div class="flex items-center">
-                        <div class="bg-green-100 p-3 rounded-full mr-4 text-green-600"><i class="fas fa-file-medical"></i></div>
-                        <div class="text-left">
-                            <p class="font-bold text-dark">Log Annual Health Report</p>
-                            <p class="text-xs text-gray-500">Update ML risk profile (+5,000 pts)</p>
-                        </div>
-                    </div>
-                    <i class="fas fa-chevron-right text-gray-300"></i>
-                </button>
-            </div>
-
-            <div class="pt-2 text-center pb-8">
-                <button onclick="resetDemo()" class="text-xs text-gray-400 underline hover:text-gray-600">Reset Demo for Judges</button>
+            <div class="pt-4 text-center">
+                <button onclick="resetDemo()" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest hover:text-gray-600 transition"><i class="fas fa-sync-alt mr-1"></i> Reset Demo</button>
             </div>
         </div>
     </div>
@@ -128,137 +155,4 @@
             </div>
             
             <div id="authSuccess" class="hidden">
-                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
-                    <i class="fas fa-check text-green-600 text-xl"></i>
-                </div>
-                <h3 class="text-lg font-bold text-dark">Cashless Approved</h3>
-                <p class="text-xs text-gray-500 mt-2">Tier 1 / Tier 2 network selected. You may proceed to admission without upfront deposit.</p>
-                <button onclick="closeAuthModal()" class="mt-6 w-full bg-gray-100 text-dark font-bold py-2 rounded-xl">Close</button>
-            </div>
-
-            <div id="authPayClaim" class="hidden">
-                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-orange-100 mb-4">
-                    <i class="fas fa-file-invoice-dollar text-orange-600 text-xl"></i>
-                </div>
-                <h3 class="text-lg font-bold text-dark">Pay & Claim Required</h3>
-                <p class="text-xs text-gray-500 mt-2">You selected a Tier 3 Non-Panel hospital. Cashless is disabled to prevent overbilling. Please settle the bill upfront and submit via the app for reimbursement.</p>
-                <button onclick="closeAuthModal()" class="mt-6 w-full bg-orange-500 text-white font-bold py-2 rounded-xl hover:bg-orange-600 transition">Acknowledge</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="uploadModal" class="absolute inset-0 bg-gray-900 bg-opacity-60 hidden flex justify-center items-center z-50 p-4">
-        <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl transform transition-all">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-dark">Upload Health Report</h3>
-                <button onclick="toggleModal('uploadModal')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
-            </div>
-            <p class="text-xs text-gray-500 mb-4">Our backend AI extracts age and chronic conditions to update your risk profile.</p>
-            <div class="border-2 border-dashed border-brand rounded-xl p-6 text-center cursor-pointer hover:bg-teal-50 transition bg-gray-50 mb-4" onclick="simulateFileSelect()">
-                <i class="fas fa-cloud-upload-alt text-3xl text-brand mb-2"></i>
-                <p class="text-sm font-bold text-dark" id="uploadText">Tap to select PDF/JPG</p>
-            </div>
-            <button id="submitBtn" onclick="submitReport()" class="w-full bg-gray-300 text-gray-500 font-bold py-3 rounded-xl transition" disabled>Upload & Update Profile</button>
-        </div>
-    </div>
-
-    <script>
-        let selectedTier = 2; // Default to Tier 2
-
-        // Handle Tier Selection UI
-        function selectTier(t) {
-            selectedTier = t;
-            
-            // Reset all cards to faded
-            [1,2,3].forEach(num => {
-                let card = document.getElementById(`t${num}-card`);
-                card.className = "tier-card border border-gray-200 rounded-xl p-3 flex justify-between items-center cursor-pointer transition opacity-50 bg-white";
-                card.querySelector('i').className = "fas fa-hospital-alt text-gray-300 text-xl";
-            });
-            
-            // Highlight selected card
-            let activeCard = document.getElementById(`t${t}-card`);
-            let icon = activeCard.querySelector('i');
-            
-            if(t === 1) {
-                activeCard.className = "tier-card border-2 border-green-500 bg-green-50 rounded-xl p-3 flex justify-between items-center cursor-pointer transition shadow-sm scale-[1.02]";
-                icon.className = "fas fa-hospital-alt text-green-500 text-xl";
-            }
-            if(t === 2) {
-                activeCard.className = "tier-card border-2 border-brand bg-teal-50 rounded-xl p-3 flex justify-between items-center cursor-pointer transition shadow-sm scale-[1.02]";
-                icon.className = "fas fa-hospital text-brand text-xl";
-            }
-            if(t === 3) {
-                activeCard.className = "tier-card border-2 border-orange-400 bg-orange-50 rounded-xl p-3 flex justify-between items-center cursor-pointer transition shadow-sm scale-[1.02]";
-                icon.className = "fas fa-hospital-user text-orange-500 text-xl";
-            }
-            
-            // Update Pre-Auth Button
-            let btn = document.getElementById("preAuthBtn");
-            if(t === 3) {
-                btn.className = "w-full bg-orange-500 text-white font-bold py-3 rounded-xl transition hover:bg-orange-600 shadow-md flex items-center justify-center mt-3";
-                btn.innerHTML = '<i class="fas fa-file-invoice-dollar mr-2"></i> Trigger Pay & Claim Workflow';
-            } else {
-                btn.className = "w-full bg-brand text-white font-bold py-3 rounded-xl transition hover:bg-teal-700 shadow-md flex items-center justify-center mt-3";
-                btn.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Request Pre-Authorization';
-            }
-        }
-
-        // Toggle Hospital List
-        function toggleHospitals() {
-            document.getElementById('hospitalList').classList.toggle('hidden');
-        }
-
-        // Pre-Auth Gateway Logic
-        function requestPreAuth() {
-            document.getElementById('authModal').classList.remove('hidden');
-            document.getElementById('authLoading').classList.remove('hidden');
-            document.getElementById('authSuccess').classList.add('hidden');
-            document.getElementById('authPayClaim').classList.add('hidden');
-            
-            // Simulate 1.5 seconds API call
-            setTimeout(() => {
-                document.getElementById('authLoading').classList.add('hidden');
-                if(selectedTier === 1 || selectedTier === 2) {
-                    document.getElementById('authSuccess').classList.remove('hidden');
-                } else {
-                    document.getElementById('authPayClaim').classList.remove('hidden');
-                }
-            }, 1500);
-        }
-        
-        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
-
-        // Existing File Upload Logic
-        function toggleModal(modalID) {
-            document.getElementById(modalID).classList.toggle("hidden");
-            document.getElementById('uploadText').innerText = "Tap to select PDF/JPG";
-            const btn = document.getElementById('submitBtn');
-            btn.className = 'w-full bg-gray-300 text-gray-500 font-bold py-3 rounded-xl transition';
-            btn.disabled = true;
-            btn.innerHTML = "Upload & Update Profile";
-        }
-
-        function simulateFileSelect() {
-            document.getElementById('uploadText').innerHTML = "<span class='text-brand'><i class='fas fa-file-pdf mr-1'></i> KPJ_Health_Report_2026.pdf</span>";
-            const btn = document.getElementById('submitBtn');
-            btn.className = 'w-full bg-brand text-white font-bold py-3 rounded-xl transition shadow-md';
-            btn.disabled = false;
-        }
-
-        async function submitReport() {
-            const btn = document.getElementById('submitBtn');
-            btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> AI Analyzing Profile...";
-            setTimeout(async () => {
-                const res = await fetch('/api/log_health_check', { method: 'POST' });
-                if (res.ok) { toggleModal('uploadModal'); window.location.reload(); }
-            }, 1500);
-        }
-
-        async function resetDemo() {
-            const res = await fetch('/api/reset', { method: 'POST' });
-            if (res.ok) window.location.reload();
-        }
-    </script>
-</body>
-</html>
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-
