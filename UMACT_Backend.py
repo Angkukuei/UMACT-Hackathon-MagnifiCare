@@ -8,7 +8,8 @@ user_data = {
     "points": 4800,
     "steps_today": 3000,
     "health_wallet_boost": 0,
-    "tier": "Bronze"
+    "tier": "Bronze",
+    "ncb": 10  # 10% No Claim Bonus
 }
 
 def update_tier():
@@ -33,14 +34,12 @@ def index():
 
 @app.route("/api/log_health_check", methods=["POST"])
 def log_health_check():
-    # Step 1: Underwriting / Health Check (+5000 points)
     user_data["points"] += 5000
     update_tier()
     return jsonify({"status": "success", "new_points": user_data["points"], "tier": user_data["tier"]})
 
 @app.route("/api/sync_wearable", methods=["POST"])
 def sync_wearable():
-    # Step 2: Sync 10,000 steps (+100 points)
     user_data["steps_today"] = 10000
     user_data["points"] += 100
     update_tier()
@@ -48,10 +47,10 @@ def sync_wearable():
 
 @app.route("/api/reset", methods=["POST"])
 def reset():
-    # Helper to reset the demo for the judges back to the starting point
     user_data["points"] = 4800
     user_data["steps_today"] = 3000
     user_data["health_wallet_boost"] = 0
+    user_data["ncb"] = 10
     update_tier()
     return jsonify({"status": "success"})
 
