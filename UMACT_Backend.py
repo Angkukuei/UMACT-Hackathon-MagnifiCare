@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
@@ -29,7 +29,6 @@ def update_tier():
 @app.route("/")
 def index():
     update_tier()
-    # Flask looks inside the 'templates' folder for this file:
     return render_template("UMACT_Frontend.html", user=user_data)
 
 @app.route("/api/log_health_check", methods=["POST"])
