@@ -24,7 +24,7 @@
                 <i class="fas fa-user-circle text-2xl"></i>
             </div>
             <p class="text-sm opacity-80">Welcome back,</p>
-            <h2 class="text-3xl font-bold">{{ user.name }}</h2>
+            <h2 class="text-3xl font-bold">Ahmad</h2>
         </div>
 
         <div class="flex-1 overflow-y-auto p-6 space-y-6 pb-12">
@@ -32,49 +32,46 @@
             <div class="bg-gradient-to-r from-dark to-gray-800 rounded-2xl p-6 text-white shadow-xl relative overflow-hidden">
                 <div class="absolute top-0 right-0 p-4 opacity-20"><i class="fas fa-gem text-6xl"></i></div>
                 <p class="text-sm text-gray-300">Vitality Status</p>
-                <h3 class="text-3xl font-bold text-yellow-400 mb-1" id="ui-tier">{{ user.tier }}</h3>
-                <p class="text-lg font-semibold"><span id="ui-points">{{ user.points }}</span> pts</p>
+                <h3 class="text-3xl font-bold text-yellow-400 mb-1" id="ui-tier">Bronze</h3>
+                <p class="text-lg font-semibold"><span id="ui-points">4800</span> pts</p>
                 <div class="mt-4 pt-4 border-t border-gray-600 flex justify-between items-center">
                     <span class="text-sm">Health Wallet Boost:</span>
-                    <span class="font-bold text-green-400">+<span id="ui-boost">{{ user.health_wallet_boost }}</span>%</span>
+                    <span class="font-bold text-green-400">+<span id="ui-boost">0</span>%</span>
                 </div>
-            </div>
-
-            <div class="border-t border-gray-200 pt-4 mt-2">
-                <h4 class="font-bold text-brand mb-3 uppercase tracking-wider text-sm"><i class="fas fa-heartbeat mr-1"></i> Preventative Vitality</h4>
-                
-                <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm mb-4">
-                    <div class="flex justify-between items-end mb-2">
-                        <div>
-                            <p class="text-gray-500 text-sm font-bold">Daily Activity</p>
-                            <p class="text-2xl font-bold text-dark"><span id="ui-steps">{{ user.steps_today }}</span> <span class="text-sm font-normal text-gray-500">/ 10k</span></p>
-                        </div>
-                        <i class="fas fa-shoe-prints text-brand text-2xl"></i>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
-                        <div class="bg-brand h-2.5 rounded-full" style="width: {{ (user.steps_today / 10000) * 100 }}%"></div>
-                    </div>
-                    <button onclick="syncWearable()" class="w-full bg-blue-50 text-blue-600 font-semibold py-2 rounded-xl border border-blue-200 hover:bg-blue-100 transition text-sm">
-                        <i class="fab fa-apple mr-2"></i> Sync Wearable (+100 pts)
-                    </button>
-                </div>
-
-                <button onclick="toggleModal('uploadModal')" class="w-full bg-white border border-gray-200 rounded-2xl p-4 shadow-sm flex items-center justify-between hover:shadow-md transition mb-4">
-                    <div class="flex items-center">
-                        <div class="bg-green-100 p-3 rounded-full mr-4 text-green-600"><i class="fas fa-file-medical"></i></div>
-                        <div class="text-left">
-                            <p class="font-bold text-dark text-sm">Log Health Report</p>
-                            <p class="text-xs text-gray-500">Update ML risk profile (+5,000 pts)</p>
-                        </div>
-                    </div>
-                    <i class="fas fa-chevron-right text-gray-300"></i>
-                </button>
             </div>
 
             <div class="border-t border-gray-200 pt-4 mt-2">
                 <h4 class="font-bold text-dark mb-3 uppercase tracking-wider text-sm"><i class="fas fa-hospital mr-1"></i> Admission Gateway</h4>
                 
                 <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
+                    
+                    <div class="mb-4">
+                        <label class="text-xs font-bold text-gray-500 uppercase">Search Diagnosis (DRG)</label>
+                        <div class="relative mt-1">
+                            <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
+                            <input type="text" id="diagnosisSelect" list="drgList" oninput="updateRewardInfo()" placeholder="Type diagnosis..." value="Dengue Fever" class="w-full pl-10 p-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold text-dark focus:ring-2 focus:ring-brand outline-none transition">
+                        </div>
+                        <datalist id="drgList">
+                            <option value="Angioplasty With Stent">
+                            <option value="Arthroscopy">
+                            <option value="Asthma Exacerbation">
+                            <option value="Bronchitis">
+                            <option value="C-Section">
+                            <option value="Cabg">
+                            <option value="Copd Exacerbation">
+                            <option value="Dengue Fever">
+                            <option value="Dengue Haemorrhagic Fever">
+                            <option value="Heart Valve Replacement">
+                        </datalist>
+                    </div>
+
+                    <div id="rewardBanner" class="hidden mb-4 bg-yellow-50 border border-yellow-200 p-3 rounded-xl flex items-center transition-all animate-pulse shadow-sm">
+                        <div class="bg-yellow-400 text-white p-2 rounded-lg mr-3"><i class="fas fa-coins text-lg"></i></div>
+                        <p class="text-[11px] text-yellow-800 leading-tight">
+                            <strong>Opportunity:</strong> Switch to Tier 1 Government Hospital to earn <span id="rewardPointsDisplay" class="font-bold underline text-sm">0</span> Vitality Points!
+                        </p>
+                    </div>
+
                     <label class="text-xs font-bold text-gray-500 uppercase">Select Coverage Tier</label>
                     <div class="space-y-2 mt-2 mb-4">
                         <div id="t1-card" onclick="selectTier(1)" class="tier-card border border-gray-200 rounded-xl p-3 flex justify-between items-center cursor-pointer transition opacity-50">
@@ -112,6 +109,13 @@
                             </div>
                             <span class="bg-green-100 text-green-700 text-[9px] font-bold px-2 py-1 rounded border border-green-200"><i class="fas fa-shield-alt"></i> DRG Compliant</span>
                         </div>
+                        <div class="bg-gray-50 p-2 rounded-lg border border-gray-200 flex justify-between items-center">
+                            <div>
+                                <p class="text-xs font-bold text-dark">Hospital Kuala Lumpur (HKL)</p>
+                                <p class="text-[10px] text-gray-500">5.1 km away • Tier 1</p>
+                            </div>
+                            <span class="bg-green-100 text-green-700 text-[9px] font-bold px-2 py-1 rounded border border-green-200"><i class="fas fa-shield-alt"></i> DRG Compliant</span>
+                        </div>
                     </div>
 
                     <button id="preAuthBtn" onclick="showNCBWarning()" class="w-full bg-brand text-white font-bold py-3 rounded-xl transition hover:bg-teal-700 shadow-md flex items-center justify-center">
@@ -119,9 +123,9 @@
                     </button>
                 </div>
             </div>
-
+            
             <div class="pt-4 text-center">
-                <button onclick="resetDemo()" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest hover:text-gray-600 transition"><i class="fas fa-sync-alt mr-1"></i> Reset Demo</button>
+                <button onclick="window.location.reload()" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest hover:text-gray-600 transition"><i class="fas fa-sync-alt mr-1"></i> Reset Demo</button>
             </div>
         </div>
     </div>
@@ -132,7 +136,7 @@
                 <i class="fas fa-exclamation-triangle text-yellow-600 text-3xl"></i>
             </div>
             <h3 class="text-xl font-bold text-dark">No Claim Bonus Warning</h3>
-            <p class="text-sm text-gray-500 mt-2">You currently have a <strong class="text-yellow-600">{{ user.ncb }}% No Claim Bonus (NCB)</strong> discount on your premium.</p>
+            <p class="text-sm text-gray-500 mt-2">You currently have a <strong class="text-yellow-600">10% No Claim Bonus (NCB)</strong> discount on your premium.</p>
             <p class="text-sm text-gray-500 mt-3">Proceeding with this insurance claim will <strong class="text-red-500">reset your NCB to 0%</strong> next year.</p>
 
             <div class="mt-6 space-y-3">
@@ -153,14 +157,7 @@
                 <h3 class="text-lg font-bold text-dark">Verifying Policy...</h3>
             </div>
             
-            <div id="authSuccess" class="hidden">
-                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
-                    <i class="fas fa-check text-green-600 text-xl"></i>
-                </div>
-                <h3 class="text-lg font-bold text-dark">Cashless Approved</h3>
-                <p class="text-xs text-gray-500 mt-2">Tier 1/2 selected. You may proceed without upfront deposit.</p>
-                <button onclick="closeAuthModal()" class="mt-6 w-full bg-gray-100 text-dark font-bold py-2 rounded-xl hover:bg-gray-200">Close</button>
-            </div>
+            <div id="authSuccess" class="hidden"></div>
 
             <div id="authPayClaim" class="hidden">
                 <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-orange-100 mb-4">
@@ -173,63 +170,68 @@
         </div>
     </div>
 
-    <div id="uploadModal" class="absolute inset-0 bg-gray-900 bg-opacity-60 hidden flex justify-center items-center z-50 p-4">
-        <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl transform transition-all">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-dark">Upload Health Report</h3>
-                <button onclick="toggleModal('uploadModal')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
-            </div>
-            <div class="border-2 border-dashed border-brand rounded-xl p-6 text-center cursor-pointer hover:bg-teal-50 transition bg-gray-50 mb-4" onclick="simulateFileSelect()">
-                <i class="fas fa-cloud-upload-alt text-3xl text-brand mb-2"></i>
-                <p class="text-sm font-bold text-dark" id="uploadText">Tap to select PDF</p>
-            </div>
-            <button id="submitBtn" onclick="submitReport()" class="w-full bg-gray-300 text-gray-500 font-bold py-3 rounded-xl transition" disabled>Upload & Update Profile</button>
-        </div>
-    </div>
-
     <script>
         let selectedTier = 2; // Default to Tier 2
+        let currentPotentialPoints = 0;
 
-        // Vitality Functions
-        async function syncWearable() {
-            console.log("Sync Wearable clicked");
-            const res = await fetch('/api/sync_wearable', { method: 'POST' });
-            if (res.ok) window.location.reload();
-        }
+        // Local fallback data for live demo safety
+        const fallbackDRG = {
+            "Angioplasty With Stent": { "T1": 48867, "T2": 165705 },
+            "Arthroscopy": { "T1": 30784, "T2": 105563 },
+            "Asthma Exacerbation": { "T1": 9678, "T2": 32894 },
+            "Bronchitis": { "T1": 9484, "T2": 33212 },
+            "C-Section": { "T1": 9189, "T2": 31006 },
+            "Cabg": { "T1": 48939, "T2": 167043 },
+            "Copd Exacerbation": { "T1": 9823, "T2": 32430 },
+            "Dengue Fever": { "T1": 6899, "T2": 23573 },
+            "Dengue Haemorrhagic Fever": { "T1": 7043, "T2": 23152 },
+            "Heart Valve Replacement": { "T1": 49025, "T2": 165113 }
+        };
 
-        async function resetDemo() {
-            console.log("Resetting Demo");
-            const res = await fetch('/api/reset', { method: 'POST' });
-            if (res.ok) window.location.reload();
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            updateRewardInfo();
+        });
 
-        // Upload Functions
-        function toggleModal(modalID) {
-            document.getElementById(modalID).classList.toggle("hidden");
-            if (modalID === 'uploadModal') {
-                document.getElementById('uploadText').innerText = "Tap to select PDF";
-                const btn = document.getElementById('submitBtn');
-                btn.className = 'w-full bg-gray-300 text-gray-500 font-bold py-3 rounded-xl transition';
-                btn.disabled = true;
-                btn.innerHTML = "Upload & Update Profile";
+        // Safe Reward Logic (Works even if backend is offline)
+        async function updateRewardInfo() {
+            const diag = document.getElementById("diagnosisSelect").value;
+            
+            // If the user hasn't typed a valid diagnosis from the list yet, hide the banner
+            if (!fallbackDRG[diag]) {
+                document.getElementById("rewardBanner").classList.add("hidden");
+                currentPotentialPoints = 0;
+                return;
+            }
+            
+            try {
+                // Try backend first
+                const res = await fetch('/api/calculate_reward', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ diagnosis: diag })
+                });
+                const data = await res.json();
+                currentPotentialPoints = data.points;
+            } catch (error) {
+                // Fallback to local JS calculation if backend is disconnected
+                const savings = fallbackDRG[diag].T2 - fallbackDRG[diag].T1;
+                currentPotentialPoints = Math.floor(savings * 0.10);
+            }
+
+            const banner = document.getElementById("rewardBanner");
+            const pointsText = document.getElementById("rewardPointsDisplay");
+
+            if (selectedTier > 1 && currentPotentialPoints > 0) {
+                banner.classList.remove("hidden");
+                pointsText.innerText = currentPotentialPoints.toLocaleString();
+            } else {
+                banner.classList.add("hidden");
             }
         }
 
-        function simulateFileSelect() {
-            document.getElementById('uploadText').innerHTML = "<span class='text-brand'><i class='fas fa-file-pdf mr-1'></i> Report_2026.pdf</span>";
-            const btn = document.getElementById('submitBtn');
-            btn.className = 'w-full bg-brand text-white font-bold py-3 rounded-xl transition shadow-md';
-            btn.disabled = false;
-        }
-
-        async function submitReport() {
-            console.log("Submit Report clicked");
-            const btn = document.getElementById('submitBtn');
-            btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> AI Analyzing...";
-            setTimeout(async () => {
-                const res = await fetch('/api/log_health_check', { method: 'POST' });
-                if (res.ok) { toggleModal('uploadModal'); window.location.reload(); }
-            }, 1000);
+        // Toggle Hospital List Visibility
+        function toggleHospitals() {
+            document.getElementById('hospitalList').classList.toggle('hidden');
         }
 
         // Admission Gateway Functions
@@ -261,20 +263,17 @@
             let btn = document.getElementById("preAuthBtn");
             if(t === 3) {
                 btn.className = "w-full bg-orange-500 text-white font-bold py-3 rounded-xl transition hover:bg-orange-600 shadow-md flex items-center justify-center mt-3";
-                btn.innerHTML = '<i class="fas fa-file-invoice-dollar mr-2"></i> Trigger Pay & Claim Workflow';
+                btn.innerHTML = '<i class="fas fa-file-invoice-dollar mr-2"></i> Trigger Pay & Claim';
             } else {
                 btn.className = "w-full bg-brand text-white font-bold py-3 rounded-xl transition hover:bg-teal-700 shadow-md flex items-center justify-center mt-3";
                 btn.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Request Pre-Authorization';
             }
+
+            updateRewardInfo();
         }
 
-        function toggleHospitals() {
-            document.getElementById('hospitalList').classList.toggle('hidden');
-        }
-
-        // 🌟 NCB Warning Logic 🌟
+        // Modal Logic
         function showNCBWarning() {
-            console.log("Triggered NCB Warning");
             document.getElementById('ncbModal').classList.remove('hidden');
         }
 
@@ -282,14 +281,46 @@
             document.getElementById('ncbModal').classList.add('hidden');
         }
 
-        // Executes if user clicks "Proceed" on the NCB warning
-        function confirmPreAuth() {
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+            document.getElementById('authSuccess').innerHTML = '';
+        }
+
+        async function confirmPreAuth() {
             closeNCBModal();
             document.getElementById('authModal').classList.remove('hidden');
             document.getElementById('authLoading').classList.remove('hidden');
             document.getElementById('authSuccess').classList.add('hidden');
             document.getElementById('authPayClaim').classList.add('hidden');
             
+            if(selectedTier === 1 && currentPotentialPoints > 0) {
+                try {
+                    await fetch('/api/claim_reward', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ points: currentPotentialPoints })
+                    });
+                } catch(e) { console.log("Local fallback mode: points claimed visually."); }
+                
+                document.getElementById('authSuccess').innerHTML = `
+                    <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-yellow-100 mb-4">
+                        <i class="fas fa-coins text-yellow-500 text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark">Cashless & Rewarded!</h3>
+                    <p class="text-sm text-gray-500 mt-2">You earned <strong class="text-yellow-600">${currentPotentialPoints.toLocaleString()} Points</strong> for choosing a cost-effective Government hospital.</p>
+                    <button onclick="closeAuthModal()" class="mt-6 w-full bg-brand text-white font-bold py-3 rounded-xl hover:bg-teal-700 shadow-md">Done</button>
+                `;
+            } else if (selectedTier === 2) {
+                 document.getElementById('authSuccess').innerHTML = `
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
+                        <i class="fas fa-check text-green-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-dark">Cashless Approved</h3>
+                    <p class="text-xs text-gray-500 mt-2">Tier 2 selected. You may proceed without upfront deposit.</p>
+                    <button onclick="closeAuthModal()" class="mt-6 w-full bg-gray-100 text-dark font-bold py-2 rounded-xl hover:bg-gray-200">Close</button>
+                `;
+            }
+
             setTimeout(() => {
                 document.getElementById('authLoading').classList.add('hidden');
                 if(selectedTier === 1 || selectedTier === 2) {
@@ -299,8 +330,6 @@
                 }
             }, 1200);
         }
-        
-        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
     </script>
 </body>
 </html>
